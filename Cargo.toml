@@ -1,8 +1,13 @@
 [package]
 name = "joplin-reader"
+description = "Library which reads a Joplin data folder and provides an interface to the items."
 version = "0.0.1"
 authors = ["Teraku <teraku@teraku.de>"]
 edition = "2018"
+license = "MIT OR Apache-2.0"
+homepage = "https://github.com/Milchdealer/joplin-reader"
+repository = "https://github.com/Milchdealer/joplin-reader"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
