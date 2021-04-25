@@ -39,7 +39,7 @@ impl JoplinNotebook {
                         master_keys.insert(master_key_id.to_string(), mk);
                     }
                 } else {
-                    return Err(JoplinReaderError::NoEncryptionKey);
+                    return Err(JoplinReaderError::NoEncryptionKey { key: format!("{:?}", key_path)});
                 }
             }
         }
@@ -86,14 +86,14 @@ impl JoplinNotebook {
             let master_key_id = match note.get_encryption_key_id() {
                 Some(key_id) => key_id.to_string(),
                 None => {
-                    return Err(JoplinReaderError::NoEncryptionKey);
+                    return Err(JoplinReaderError::NoEncryptionKey {key: format!("{:?}", note.get_encryption_key_id())});
                 }
             };
 
             encryption_key = match self.master_keys.get(&master_key_id) {
                 Some(master_key) => Some(master_key.as_str()),
                 None => {
-                    return Err(JoplinReaderError::NoEncryptionKey);
+                    return Err(JoplinReaderError::NoEncryptionKey {key: format!("{:?}", master_key_id)});
                 }
             }
         }

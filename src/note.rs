@@ -804,7 +804,7 @@ impl NoteInfo {
         let encryption_key = match encryption_key {
             Some(ek) => ek,
             _ => {
-                return Err(JoplinReaderError::NoEncryptionKey);
+                return Err(JoplinReaderError::NoEncryptionKey { key: format!("{:?}", encryption_key)});
             }
         };
 

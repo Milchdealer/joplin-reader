@@ -36,8 +36,8 @@ pub enum JoplinReaderError {
     NoteNotFound { search_text: String },
     #[error("Invalid format: {message:?}")]
     InvalidFormat { message: String },
-    #[error("No encryption key found")]
-    NoEncryptionKey,
+    #[error("Encryption key `{key:?}` not found")]
+    NoEncryptionKey { key: String },
     #[error("No encryption text provided")]
     NoEncryptionText,
     #[error("No text found")]
