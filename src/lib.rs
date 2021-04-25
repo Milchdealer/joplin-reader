@@ -1,33 +1,52 @@
+//! # joplin-reader
+//! Read-only library for joplin data folders.
+//!
+//! ## Usage
+//!
+//! Decrypt a file loaded into a string:
+//! ```rust
+//! use joplin_reader::notebook::JoplinNotebook;
+//! 
+//! # fn main() -> Result<(), SjclError> {
+//! let joplin_folder = "./Joplin";
+//! let passwords = "3336eb7a2472d9ae4a690a978fa8a46f,plaintext_password";
+//! let notebooks = JoplinNotebook::new(joplin_folder, passwords)?;
+//! println!("{:?}", notebooks.read_note("9a20a9e4d336de70cb6d22a58a3e673c"));
+//! # Ok(())
+//! # }
+//! ```
+//!
+
 pub mod key;
 pub mod note;
 pub mod notebook;
 
-use snafu::Snafu;
-#[derive(Debug, Snafu)]
+use thiserror::Error;
+#[derive(Error, Debug)]
 pub enum JoplinReaderError {
-    #[snafu(display("Failed to read joplin folder"))]
+    #[error("Failed to read joplin folder")]
     FolderReadError,
-    #[snafu(display("Failed to read file: {}", message))]
+    #[error("Failed to read file: {message:?}")]
     FileReadError { message: String },
-    #[snafu(display("Failed to decrypt: {}", message))]
+    #[error("Failed to decrypt: {message:?}")]
     DecryptionError { message: String },
-    #[snafu(display("Note `{}` not found", note_id))]
+    #[error("Note `{note_id:?}` not found")]
     NoteIdNotFound { note_id: String },
-    #[snafu(display("No note with text `{}` found", search_text))]
+    #[error("No note with text `{search_text:?}` found")]
     NoteNotFound { search_text: String },
-    #[snafu(display("Invalid format: {}", message))]
+    #[error("Invalid format: {message:?}")]
     InvalidFormat { message: String },
-    #[snafu(display("No encryption key found"))]
+    #[error("No encryption key found")]
     NoEncryptionKey,
-    #[snafu(display("No encryption text provided"))]
+    #[error("No encryption text provided")]
     NoEncryptionText,
-    #[snafu(display("No text found"))]
+    #[error("No text found")]
     NoText,
-    #[snafu(display("Unexpected end of note"))]
+    #[error("Unexpected end of note")]
     UnexpectedEndOfNote,
-    #[snafu(display("Unknown encryption method"))]
+    #[error("Unknown encryption method")]
     UnknownEncryptionMethod,
-    #[snafu(display("Key id mismatch"))]
+    #[error("Key id mismatch")]
     KeyIdMismatch,
 }
 

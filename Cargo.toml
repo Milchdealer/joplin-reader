@@ -1,7 +1,7 @@
 [package]
 name = "joplin-reader"
 description = "Library which reads a Joplin data folder and provides an interface to the items."
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Teraku <teraku@teraku.de>"]
 edition = "2018"
 license = "MIT OR Apache-2.0"
@@ -18,5 +18,5 @@ chrono = "0.4"
 percent-encoding = "2.1.0"
 serde = { version = "1.0.124", features = ["derive"] }
 serde_json = "1.0.59"
-snafu = "0.6.10"
+thiserror = "1.0"
 regex = "1.4.5"

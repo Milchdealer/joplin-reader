@@ -22,10 +22,10 @@ impl JoplinNotebook {
         passwords: I,
     ) -> Result<JoplinNotebook, JoplinReaderError>
     where
-        I: Iterator<Item = &'a str>,
+        I: IntoIterator<Item = &'a str>,
     {
         let mut master_keys: HashMap<String, MasterKey> = HashMap::new();
-        for password in passwords {
+        for password in passwords.into_iter() {
             let mut iter = password.splitn(2, ",");
             let master_key_id = iter.next();
             let key = iter.next();
