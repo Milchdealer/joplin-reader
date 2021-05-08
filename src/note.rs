@@ -107,7 +107,7 @@ impl Serialize for NoteInfo {
 /// general structure of the note properties from Joplin minus the ones already
 /// read into [`NoteInfo`].
 /// See: https://joplinapp.org/api/references/rest_api/#properties
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoteProperties {
     title: Option<String>,
     body: Option<String>,

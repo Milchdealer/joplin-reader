@@ -112,4 +112,9 @@ impl JoplinNotebook {
             }),
         }
     }
+
+    /// Iterate all item Ids stored
+    pub fn iter(&self) -> impl Iterator<Item = &String> {
+        self.notes.keys()
+    }
 }

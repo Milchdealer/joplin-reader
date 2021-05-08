@@ -9,7 +9,8 @@
 //! 
 //! # fn main() -> Result<(), SjclError> {
 //! let joplin_folder = "./Joplin";
-//! let passwords = "3336eb7a2472d9ae4a690a978fa8a46f,plaintext_password";
+//! // I usually take a ';'-separated list of id,password pairs.
+//! let passwords = "3336eb7a2472d9ae4a690a978fa8a46f,plaintext_password".split(";");
 //! let notebooks = JoplinNotebook::new(joplin_folder, passwords)?;
 //! println!("{:?}", notebooks.read_note("9a20a9e4d336de70cb6d22a58a3e673c"));
 //! # Ok(())
