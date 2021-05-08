@@ -12,6 +12,8 @@ use std::time::SystemTime;
 use chrono::NaiveDateTime;
 use percent_encoding::percent_decode_str;
 use sjcl::decrypt_raw;
+use serde;
+use serde::ser::{Serialize, Serializer, SerializeStruct};
 
 /// How often encrypted notes should be refreshed in seconds
 const REFRESH_INTERVAL: u64 = 60 * 60 * 12;
@@ -20,7 +22,7 @@ const HEADER_SIZE: u32 = 45;
 
 /// Various types of items a joplin file can be.
 /// See: https://joplinapp.org/api/references/rest_api/#item-type-ids
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, serde::Serialize)]
 pub enum JoplinItemType {
     Undefined = 0,
     Note = 1,
@@ -80,6 +82,25 @@ pub struct NoteInfo {
     // `read_time` is when it was read into by **us**
     read_time: Option<SystemTime>,
     content: NoteProperties,
+}
+
+impl Serialize for NoteInfo {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let mut state = serializer.serialize_struct("NoteInfo", 9)?;
+        state.serialize_field("created_time", &self.path)?;
+        state.serialize_field("id", &self.id)?;
+        state.serialize_field("type_", &self.type_)?;
+        state.serialize_field("encryption_applied", &self.encryption_applied)?;
+        state.serialize_field("parent_id", &self.parent_id)?;
+        state.serialize_field("encryption_key_id", &self.encryption_key_id)?;
+        state.serialize_field("updated_time", &self.updated_time.map_or(0, |ut| ut.timestamp()))?;
+        state.serialize_field("read_time", &self.read_time)?;
+        state.serialize_field("content", &self.content)?;
+        state.end()
+    }
 }
 
 /// Contains the actual properties and content of a note. This follows the
@@ -259,6 +280,35 @@ impl From<HashMap<String, String>> for NoteProperties {
             markup_language,
             is_shared,
         }
+    }
+}
+
+impl Serialize for NoteProperties {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let mut state = serializer.serialize_struct("NoteProperties", 19)?;
+        state.serialize_field("title", &self.title.as_ref().unwrap())?;
+        state.serialize_field("body", &self.body.as_ref().unwrap())?;
+        state.serialize_field("created_time", &self.created_time.as_ref().unwrap().timestamp())?;
+        state.serialize_field("altitude", &self.altitude.as_ref().unwrap())?;
+        state.serialize_field("latitude", &self.latitude.as_ref().unwrap())?;
+        state.serialize_field("longitude", &self.longitude.as_ref().unwrap())?;
+        state.serialize_field("author", &self.author.as_ref().unwrap())?;
+        state.serialize_field("source_url", &self.source_url.as_ref().unwrap())?;
+        state.serialize_field("is_todo", &self.is_todo.as_ref().unwrap())?;
+        state.serialize_field("todo_due", &self.todo_due.as_ref().unwrap())?;
+        state.serialize_field("todo_completed", &self.todo_completed.as_ref().unwrap())?;
+        state.serialize_field("source", &self.source.as_ref().unwrap())?;
+        state.serialize_field("source_application", &self.source_application.as_ref().unwrap())?;
+        state.serialize_field("application_data", &self.application_data.as_ref().unwrap())?;
+        state.serialize_field("order", &self.order.as_ref().unwrap())?;
+        state.serialize_field("user_created_time", &self.user_created_time.as_ref().unwrap().timestamp())?;
+        state.serialize_field("user_updated_time", &self.user_updated_time.as_ref().unwrap().timestamp())?;
+        state.serialize_field("markup_language", &self.markup_language.as_ref().unwrap())?;
+        state.serialize_field("is_shared", &self.is_shared.as_ref().unwrap())?;
+        state.end()
     }
 }
 

@@ -6,9 +6,11 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 
+use serde::Serialize;
+
 /// Container `struct` which contains the references (and contents) to the
 /// [`NoteInfo`]s as well as the [`MasterKey`]s.
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct JoplinNotebook {
     notes: HashMap<String, NoteInfo>,
     master_keys: HashMap<String, MasterKey>,
