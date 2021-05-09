@@ -448,7 +448,7 @@ impl NoteInfo {
             }
         };
 
-        if !body.is_empty() {
+        if !body.is_empty() && body.len() >= 2 {
             kv_store.insert("title".to_string(), body.remove(0));
             body.remove(0); // Because it is title\n\n
         }

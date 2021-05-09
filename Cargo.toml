@@ -1,7 +1,7 @@
 [package]
 name = "joplin-reader"
 description = "Library which reads a Joplin data folder and provides an interface to the items."
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Teraku <teraku@teraku.de>"]
 edition = "2018"
 license = "MIT OR Apache-2.0"
